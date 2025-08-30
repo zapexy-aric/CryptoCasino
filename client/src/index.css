@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(222, 47%, 11%);
+  --foreground: hsl(213, 31%, 91%);
+  --card: hsl(222, 84%, 5%);
+  --card-foreground: hsl(213, 31%, 91%);
+  --popover: hsl(222, 84%, 5%);
+  --popover-foreground: hsl(213, 31%, 91%);
+  --primary: hsl(262, 90%, 50%);
+  --primary-foreground: hsl(210, 20%, 98%);
+  --secondary: hsl(215, 25%, 27%);
+  --secondary-foreground: hsl(210, 20%, 98%);
+  --muted: hsl(215, 27%, 17%);
+  --muted-foreground: hsl(217, 10%, 64%);
+  --accent: hsl(142, 86%, 28%);
+  --accent-foreground: hsl(355, 7%, 97%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(210, 20%, 98%);
+  --border: hsl(215, 27%, 17%);
+  --input: hsl(215, 27%, 17%);
+  --ring: hsl(262, 90%, 50%);
+  --chart-1: hsl(262, 90%, 50%);
+  --chart-2: hsl(142, 86%, 28%);
+  --chart-3: hsl(42, 93%, 56%);
+  --chart-4: hsl(147, 79%, 42%);
+  --chart-5: hsl(341, 75%, 51%);
+  --sidebar: hsl(222, 84%, 5%);
+  --sidebar-foreground: hsl(213, 31%, 91%);
+  --sidebar-primary: hsl(262, 90%, 50%);
+  --sidebar-primary-foreground: hsl(210, 20%, 98%);
+  --sidebar-accent: hsl(142, 86%, 28%);
+  --sidebar-accent-foreground: hsl(355, 7%, 97%);
+  --sidebar-border: hsl(215, 27%, 17%);
+  --sidebar-ring: hsl(262, 90%, 50%);
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: 'Fira Code', monospace;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: hsl(222, 47%, 11%);
+  --foreground: hsl(213, 31%, 91%);
+  --card: hsl(222, 84%, 5%);
+  --card-foreground: hsl(213, 31%, 91%);
+  --popover: hsl(222, 84%, 5%);
+  --popover-foreground: hsl(213, 31%, 91%);
+  --primary: hsl(262, 90%, 50%);
+  --primary-foreground: hsl(210, 20%, 98%);
+  --secondary: hsl(215, 25%, 27%);
+  --secondary-foreground: hsl(210, 20%, 98%);
+  --muted: hsl(215, 27%, 17%);
+  --muted-foreground: hsl(217, 10%, 64%);
+  --accent: hsl(142, 86%, 28%);
+  --accent-foreground: hsl(355, 7%, 97%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(210, 20%, 98%);
+  --border: hsl(215, 27%, 17%);
+  --input: hsl(215, 27%, 17%);
+  --ring: hsl(262, 90%, 50%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(222, 47%, 8%) 100%);
+  }
+}
+
+@layer utilities {
+  .glow-effect {
+    box-shadow: 0 0 20px hsla(262, 90%, 50%, 0.3);
+  }
+  
+  .game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px hsla(262, 90%, 50%, 0.15);
+  }
+  
+  .neon-border {
+    border: 2px solid;
+    border-image: linear-gradient(45deg, hsl(262, 90%, 50%), hsl(142, 86%, 28%), hsl(213, 100%, 50%)) 1;
+  }
+  
+  .crypto-grid {
+    background: radial-gradient(circle at 20% 50%, hsla(262, 90%, 50%, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, hsla(142, 86%, 28%, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, hsla(213, 100%, 50%, 0.1) 0%, transparent 50%);
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  .sidebar-transition {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .mobile-sidebar-hidden {
+    transform: translateX(-100%);
+  }
+  
+  .floating {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px hsla(262, 90%, 50%, 0.3); 
+  }
+  50% { 
+    box-shadow: 0 0 30px hsla(262, 90%, 50%, 0.5); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
