@@ -18,47 +18,44 @@ import { eq, desc, and } from "drizzle-orm";
 // Interface for storage operations
 export interface IStorage {
   // User operations
-  // (IMPORTANT) these user operations are mandatory for Replit Auth.
   getUser(id: string): Promise<User | undefined>;
-  upsertUser(user: UpsertUser): Promise<User>;
+  createUser(user: Omit<UpsertUser, "id">): Promise<User[]>;
   updateUserBalance(userId: string, newBalance: string): Promise<void>;
-  
+
   // Game session operations
   createGameSession(session: InsertGameSession): Promise<GameSession>;
-  getActiveGameSession(userId: string, gameType: string): Promise<GameSession | undefined>;
-  updateGameSession(sessionId: string, updates: Partial<GameSession>): Promise<GameSession>;
-  
+  getActiveGameSession(
+    userId: string,
+    gameType: string
+  ): Promise<GameSession | undefined>;
+  updateGameSession(
+    sessionId: string,
+    updates: Partial<GameSession>
+  ): Promise<GameSession>;
+
   // Transaction operations
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
   getUserTransactions(userId: string): Promise<Transaction[]>;
-  
+  updateTransactionStatus(
+    transactionId: string,
+    status: "completed" | "failed"
+  ): Promise<Transaction>;
+
   // Big wins operations
   createBigWin(bigWin: InsertBigWin): Promise<BigWin>;
   getRecentBigWins(): Promise<BigWin[]>;
 }
 
 export class DatabaseStorage implements IStorage {
+  db = db;
   // User operations
-  // (IMPORTANT) these user operations are mandatory for Replit Auth.
-
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
 
-  async upsertUser(userData: UpsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
-    return user;
+  async createUser(userData: Omit<UpsertUser, "id">): Promise<User[]> {
+    return db.insert(users).values(userData).returning();
   }
 
   async updateUserBalance(userId: string, newBalance: string): Promise<void> {
@@ -113,6 +110,18 @@ export class DatabaseStorage implements IStorage {
       .from(transactions)
       .where(eq(transactions.userId, userId))
       .orderBy(desc(transactions.createdAt));
+  }
+
+  async updateTransactionStatus(
+    transactionId: string,
+    status: "completed" | "failed"
+  ): Promise<Transaction> {
+    const [transaction] = await db
+      .update(transactions)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(transactions.id, transactionId))
+      .returning();
+    return transaction;
   }
 
   // Big wins operations
