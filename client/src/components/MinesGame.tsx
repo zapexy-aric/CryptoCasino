@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -45,6 +45,9 @@ export default function MinesGame({ className }: MinesGameProps) {
   const [betAmount, setBetAmount] = useState("10");
   const [selectedMines, setSelectedMines] = useState("3");
   const [recentPlays, setRecentPlays] = useState<Array<{multiplier: number, profit: number}>>([]);
+
+  const gemSoundRef = useRef<HTMLAudioElement>(null);
+  const mineSoundRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -123,6 +126,7 @@ export default function MinesGame({ className }: MinesGameProps) {
 
       if (data.gameOver) {
         if (data.cellType === 'mine') {
+          mineSoundRef.current?.play();
           // Add to recent plays as a loss
           setRecentPlays(prev => [
             { multiplier: 0, profit: -parseFloat(betAmount) },
@@ -136,6 +140,7 @@ export default function MinesGame({ className }: MinesGameProps) {
           });
         }
       } else {
+        gemSoundRef.current?.play();
         toast({
           title: "Safe!",
           description: `Found a gem! Multiplier: ${data.multiplier.toFixed(2)}x`,
@@ -476,6 +481,8 @@ export default function MinesGame({ className }: MinesGameProps) {
           </Card>
         </div>
       </div>
+      <audio ref={gemSoundRef} src="/gem_reveal.wav" preload="auto" />
+      <audio ref={mineSoundRef} src="/mine_blast.wav" preload="auto" />
     </div>
   );
 }
