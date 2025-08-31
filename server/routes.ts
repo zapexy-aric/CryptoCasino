@@ -49,6 +49,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ user: newUser[0] });
     } catch (error) {
       console.error("Error creating user:", error);
+      console.error("Error creating user:", error);
       res.status(500).json({ message: "Failed to create user" });
     }
   });
